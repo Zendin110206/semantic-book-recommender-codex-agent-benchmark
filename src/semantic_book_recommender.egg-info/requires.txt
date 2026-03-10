@@ -1,0 +1,15 @@
+numpy>=1.26
+pandas>=2.2
+python-dotenv>=1.0
+scikit-learn>=1.5
+
+[app]
+gradio>=5.23
+
+[llm]
+langchain>=0.3
+langchain-chroma>=0.2
+langchain-core>=0.3
+langchain-openai>=0.3
+torch>=2.5
+transformers>=4.48

@@ -1,0 +1,45 @@
+{
+  "raw_rows": 6810,
+  "clean_rows": 5805,
+  "chunk_rows": 7419,
+  "dropped_rows": 1005,
+  "median_description_length": 267.0,
+  "median_rating": 3.95,
+  "median_pages": 308.0,
+  "top_categories": {
+    "Fiction": 2293,
+    "Juvenile Fiction": 450,
+    "Biography & Autobiography": 355,
+    "History": 232,
+    "Literary Criticism": 142,
+    "Philosophy": 132,
+    "Comics & Graphic Novels": 128,
+    "Religion": 127,
+    "Drama": 107,
+    "Juvenile Nonfiction": 85
+  },
+  "top_topics": {
+    "Literary Fiction": 2990,
+    "Biography & Memoir": 443,
+    "History & Politics": 373,
+    "Poetry, Drama & Comics": 369,
+    "Philosophy & Religion": 282,
+    "Children & Young Adult": 281,
+    "Arts & Culture": 262,
+    "General Nonfiction": 207,
+    "Science & Technology": 173,
+    "Mystery & Thriller": 110
+  },
+  "top_moods": {
+    "Reflective": 2579,
+    "Tense": 1158,
+    "Romantic": 631,
+    "Adventurous": 478,
+    "Uplifting": 361,
+    "Dark": 337,
+    "Inspiring": 171,
+    "Playful": 90
+  },
+  "semantic_provider": "tfidf",
+  "metadata_provider": "keyword"
+}

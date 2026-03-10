@@ -1,0 +1,157 @@
+Metadata-Version: 2.4
+Name: semantic-book-recommender
+Version: 0.1.0
+Summary: Portfolio-grade semantic book recommender with optional OpenAI/LangChain retrieval and Gradio UI.
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=1.26
+Requires-Dist: pandas>=2.2
+Requires-Dist: python-dotenv>=1.0
+Requires-Dist: scikit-learn>=1.5
+Provides-Extra: app
+Requires-Dist: gradio>=5.23; extra == "app"
+Provides-Extra: llm
+Requires-Dist: langchain>=0.3; extra == "llm"
+Requires-Dist: langchain-chroma>=0.2; extra == "llm"
+Requires-Dist: langchain-core>=0.3; extra == "llm"
+Requires-Dist: langchain-openai>=0.3; extra == "llm"
+Requires-Dist: torch>=2.5; extra == "llm"
+Requires-Dist: transformers>=4.48; extra == "llm"
+
+# Semantic Book Recommender
+
+An end-to-end semantic recommendation system built from the `7K books` dataset by Dylan Castillo. The project turns noisy catalog metadata into a searchable recommendation engine, enriches each title with topic and mood labels, and exposes the result through a recruiter-friendly Gradio demo.
+
+## Why this project matters
+
+This repository is positioned as a portfolio project, not a notebook dump.
+
+- Problem: help users discover books from natural-language intent, not only exact titles.
+- Product thinking: recommendations can be filtered by mood, quality, and reading length.
+- Engineering thinking: the project has a reproducible build pipeline, modular source code, tests, and a deployable app.
+- Practical AI thinking: the system works offline with a strong local baseline and can upgrade to OpenAI + LangChain when API access is available.
+
+## What is inside
+
+- `src/semantic_book_recommender/`: production-style package for data prep, metadata enrichment, retrieval, ranking, and app logic.
+- `scripts/build_pipeline.py`: builds cleaned metadata, chunked retrieval corpus, summary reports, and the local semantic index.
+- `scripts/recommend_cli.py`: command-line interface for query-based and title-based recommendations.
+- `app.py`: launches the Gradio dashboard.
+- `tests/`: smoke tests for cleaning, enrichment, retrieval, and ranking.
+- `notebooks/data-exploration.ipynb`: the original exploration notebook.
+
+## Core features
+
+- Cleans and deduplicates the raw Kaggle catalog.
+- Creates retrieval-ready text chunks from book descriptions.
+- Builds a semantic search index with an offline TF-IDF + latent semantic baseline.
+- Optionally supports OpenAI embeddings with LangChain + Chroma.
+- Enriches books with topic, mood, emotion, audience, and reading-length metadata.
+- Re-ranks results using semantic similarity plus book quality signals.
+- Ships with a Gradio interface for demo-ready exploration.
+
+## Architecture
+
+1. Raw data ingestion
+2. Text cleaning and feature engineering
+3. Metadata enrichment
+4. Chunk-based semantic indexing
+5. Recommendation and reranking
+6. Demo app and CLI access
+
+## Local setup
+
+### Option 1: Conda on Windows
+
+```powershell
+conda create -n semantic_book_recommender python=3.10
+conda activate semantic_book_recommender
+pip install -r requirements.txt
+```
+
+### Option 2: Minimal local baseline
+
+If you only want the offline recommender:
+
+```powershell
+pip install -e .
+```
+
+## Build the artifacts
+
+```powershell
+python scripts/build_pipeline.py --semantic-provider tfidf --metadata-provider keyword
+```
+
+This generates:
+
+- `artifacts/reports/data_profile.json`
+- `artifacts/reports/sample_recommendations.csv`
+- local processed metadata and retrieval artifacts under `artifacts/`
+
+## Run recommendations from the CLI
+
+```powershell
+python scripts/recommend_cli.py query --query "a reflective literary novel about family, faith, and loss"
+python scripts/recommend_cli.py similar --title "Gilead"
+```
+
+## Run the app
+
+```powershell
+python app.py
+```
+
+## Upgrade path: OpenAI + LangChain
+
+The codebase supports an optional cloud path for stronger semantic retrieval.
+
+1. Add your key to `.env`.
+2. Install the optional dependencies from `requirements.txt`.
+3. Rebuild using:
+
+```powershell
+python scripts/build_pipeline.py --semantic-provider openai --metadata-provider transformers
+```
+
+Notes:
+
+- `openai` mode expects `OPENAI_API_KEY` to be set.
+- `transformers` mode is slower and requires a local backend such as PyTorch.
+- The default offline mode is intentionally fast and easy to reproduce.
+
+## Project structure
+
+```text
+.
+|-- app.py
+|-- data/
+|-- notebooks/
+|-- scripts/
+|-- src/semantic_book_recommender/
+|-- tests/
+|-- artifacts/
+|-- README.md
+|-- pyproject.toml
+```
+
+## Portfolio framing
+
+When you publish this project, lead with these points:
+
+- Natural-language retrieval instead of simple collaborative filtering.
+- Modular ML/AI pipeline that can swap between local and API-based semantic search.
+- Human-centric filters: mood, audience, rating quality, and reading length.
+- Demo interface that makes the recommender easy to understand in under one minute.
+
+## Known limitations
+
+- The default metadata enrichment is keyword-based for speed and offline reproducibility.
+- OpenAI and transformer-based enrichment are optional because they depend on external services or large local models.
+- This dataset contains sparse or inconsistent category labels, so some topic labels are heuristic.
+
+## Next improvements
+
+1. Add evaluation on held-out title similarity pairs.
+2. Deploy the Gradio demo to Hugging Face Spaces.
+3. Add user feedback logging for online reranking.
